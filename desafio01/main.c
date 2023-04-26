@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <locale.h>
 #include "biblioteca.h"
-
+//função main.
 int main(){	
     int** tab = criar();
     int ** userTab = clonarTab(tab);
@@ -62,6 +62,7 @@ int ** criar(){ //criar um vetor dinamicamente.
 	return tab; //retorna o vetor criado.
 }
 
+//imprimir vetor.
 void imprimir(int** tab){
     int i=0, j=0,a=0;
     printf("\n");
@@ -84,6 +85,7 @@ void imprimir(int** tab){
     printf(" Y\n");
 }
 
+//verifica se os campos estão todos preenchidos.
 int verificar(int** tab, int* row, int* col){
     int i=0,j=0;
     for (i = 0; i < 9; i++){
@@ -98,6 +100,7 @@ int verificar(int** tab, int* row, int* col){
     return 0;
 }
 
+//verifica linhas, colunas e boxs.
 int verificarBox(int** tab, int row, int col, int valor){
     int i=0,j=0;
     int box_linha=0, box_coluna=0;
@@ -123,6 +126,7 @@ int verificarBox(int** tab, int row, int col, int valor){
     return 1;
 }
 
+//resolver o jogo.
 int resolverSudoku(int** tab){
     int i=0,j=0,valor=0;
     if(!verificar(tab, &i, &j))
@@ -139,6 +143,7 @@ int resolverSudoku(int** tab){
     return 0;
 }
 
+//clonar tabuleiro.
 int ** clonarTab(int ** tab){
 	int i=0,j=0;
 	int ** novoTab;
@@ -158,14 +163,15 @@ void usuarioEscolha(int** userTab, int** refTab){
     int i=0,j=0;
     int posX=0, posY=0, userVal=0;
     char c;
-
+	//verifica se todos campos estão preenchidos.
     while(1){
     if(!verificar(userTab, &i, &j)){
     	printf("Parabéns!!!\n");
     	printf("\nVocê consegui concluir o Jogo!!!.\n");
         return;
     }
-
+    
+	//fechar o jogo.
     while(1){
     	printf("\nTecle [ENTER] para continuar ou [q] para fechar.\n");
         c = getchar();
@@ -181,7 +187,7 @@ void usuarioEscolha(int** userTab, int** refTab){
         else
             break;
     }
-
+	//verifica se as posições podem inserir as coordenadas.
 	printf("\nEntre com as coordenadas do Quadrado \nque você gostaria de inserir\n seguindo esse formato. \"X Y\":\n");
     scanf("%d %d",&posX, &posY);
     while(1){
@@ -196,7 +202,7 @@ void usuarioEscolha(int** userTab, int** refTab){
         }
     }
 
-
+	//verifica se os valores digitados estão entre [1-9].
 	printf("Insira um valor de [1-9]\n");
     scanf("%d", &userVal);
     while(1){
