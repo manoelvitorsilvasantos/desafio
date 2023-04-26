@@ -31,15 +31,13 @@ O gestor da empresa Comercio Leve está buscando a melhor forma de desenvolver u
 
 Como desenvolvedor responsável pelo sistema de integração com o PIX para a empresa Comércio Leve LTDA, os requisitos que você precisa atender são:
 
-<span style="color:red; font-weight:bold">
-  **1. Receber pagamentos em várias contas de vários bancos distintos**
-</span>: 
+**1. Receber pagamentos em várias contas de vários bancos distintos:** 
 O sistema deve ser capaz de receber pagamentos de diferentes bancos, em diferentes contas bancárias da empresa.
 
-**2. Receber a confirmação de recebimento do banco**: 
+**2. Receber a confirmação de recebimento do banco:** 
 O sistema deve receber uma confirmação de que o pagamento foi processado e recebido pelo banco, para que possa registrar a transação e atualizar o sistema de frente de caixa.
 
-**3. Gerar o código QR**: 
+**3. Gerar o código QR:**: 
 O sistema deve ser capaz de gerar um código QR que possa ser lido pelos clientes para realizar o pagamento usando o PIX.
 
 *Antes de começar o desenvolvimento do sistema, é importante apresentar um esboço do modelo para os gerentes da empresa avaliarem e, em seguida, definir um contrato que será usado na integração. Isso ajudará a garantir que as expectativas dos gerentes e da empresa estejam alinhadas com o que o sistema é capaz de fazer.*
