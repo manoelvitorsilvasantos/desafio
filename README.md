@@ -9,7 +9,7 @@ Gostaríamos de informá-lo que esta atividade deve ser entregue até as 00:00 h
 
 Sudoku é um jogo muito conhecido que apesar do nome japonês, tem sua origem na Suíça, onde foi criado por um designer de jogos chamado Howard Garns em 1979. Na época, o jogo era conhecido como "Number Place" e só ganhou popularidade no Japão na década de 1980, quando foi rebatizado como Sudoku, que significa "números isolados" em japonês. A partir daí, o jogo se tornou um sucesso mundial e hoje em dia é uma das atividades de quebra-cabeça mais populares e viciantes do mundo.
 
-1ª Regra - Cada linha deve conter os números de 1 a 9, sem repetições:
+<bold>1ª Regra - Cada linha deve conter os números de 1 a 9, sem repetições<bold>:
 O jogador deve preencher cada linha da tabela com cuidado para que não exista duplicação nestas no final. A ordem numérica é irrelevante.
 Cada puzzle, independentemente do seu nível de dificuldade, inicia com números pré-colocados na tabela. O jogador deve utilizar estes dígitos como pistas para encontrar quais os números em falta em cada linha e as suas posições.
 
