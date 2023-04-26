@@ -24,7 +24,7 @@ Na prática, isto significa que o processo de preencher as colunas e linhas sem 
 
 
 
-##Instruções do desafio nº 2:
+## Instruções do desafio nº 2:
 
 A empresa Comércio Leve LTDA tem um sistema de frente de caixa que faz o registo das vendas e identifica os métodos de pagamento além de se integrar com o sistema da área financeira e contábil.
 O gestor da empresa Comercio Leve está buscando a melhor forma de desenvolver um novo sistema para integrar com o sistema frente de caixa para passar a receber valores utilizando o PIX.  
