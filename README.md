@@ -45,15 +45,17 @@ O sistema deve ser capaz de gerar um código QR que possa ser lido pelos cliente
 
 # COMO CONFIGURAR OS ARQUIVOS E LIBS.
 
-**1. Primeiramente baixe a IDE: 
+**1. Primeiramente baixe a IDE:** 
 [FALCON C++ IDE](http://sourceforge.net/projects/falconcpp/files/Binaries/3.3.0.0/Falcon%20C++-3.3.0.0-Setup.exe)
-***2. Depedência Sqlite3:
-[Sqlite3 API](https://falconcpp.sourceforge.net/packages/database/sqlite)
-***3. Etapas:
 
-1. Instale a IDE;
-2. Instale o kit de pacote de depedência do SQLITE3;
-3. No projeto configure a lib para compilar o projeto.
+**2. Depedência Sqlite3:**[Sqlite3 API](https://falconcpp.sourceforge.net/packages/database/sqlite)
+**3. Etapas:**
+
+## Print como configurar.
+
+**1. Instale a IDE;**
+**2. Instale o kit de pacote de depedência do SQLITE3;**
+**3. No projeto configure a lib para compilar o projeto.**
 
 ![image](https://user-images.githubusercontent.com/23035967/236598121-1bdd51b7-7e58-4876-bf2b-6e5f762c6436.png)
 ![image](https://user-images.githubusercontent.com/23035967/236598128-76521c11-5808-42de-b29a-91a345c4ae13.png)
@@ -65,6 +67,6 @@ O sistema deve ser capaz de gerar um código QR que possa ser lido pelos cliente
 ![image](https://user-images.githubusercontent.com/23035967/236598178-74681447-ce06-46fd-8ba1-7edfd2832c2b.png)
 ![image](https://user-images.githubusercontent.com/23035967/236598191-9a2e0d56-afc6-4d16-b31c-f22624005d43.png)
 
-*** Credências para Logar no Sistema.
-Usuários: mvictor,meganews, admin
-Senhas: 1234, 1234, admin
+## Credências para Logar no Sistema.
+### Usuários: mvictor,meganews, admin
+### Senhas: 1234, 1234, admin
