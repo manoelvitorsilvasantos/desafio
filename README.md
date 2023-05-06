@@ -41,3 +41,30 @@ O sistema deve receber uma confirmação de que o pagamento foi processado e rec
 O sistema deve ser capaz de gerar um código QR que possa ser lido pelos clientes para realizar o pagamento usando o PIX.
 
 *Antes de começar o desenvolvimento do sistema, é importante apresentar um esboço do modelo para os gerentes da empresa avaliarem e, em seguida, definir um contrato que será usado na integração. Isso ajudará a garantir que as expectativas dos gerentes e da empresa estejam alinhadas com o que o sistema é capaz de fazer.*
+
+
+# COMO CONFIGURAR OS ARQUIVOS E LIBS.
+
+**1. Primeiramente baixe a IDE: 
+[FALCON C++ IDE](http://sourceforge.net/projects/falconcpp/files/Binaries/3.3.0.0/Falcon%20C++-3.3.0.0-Setup.exe)
+***2. Depedência Sqlite3:
+[Sqlite3 API](https://falconcpp.sourceforge.net/packages/database/sqlite)
+***3. Etapas:
+
+1. Instale a IDE;
+2. Instale o kit de pacote de depedência do SQLITE3;
+3. No projeto configure a lib para compilar o projeto.
+
+![image](https://user-images.githubusercontent.com/23035967/236598121-1bdd51b7-7e58-4876-bf2b-6e5f762c6436.png)
+![image](https://user-images.githubusercontent.com/23035967/236598128-76521c11-5808-42de-b29a-91a345c4ae13.png)
+![image](https://user-images.githubusercontent.com/23035967/236598137-5b58c33d-de02-4b35-8dcd-c37afe4625c1.png)
+![image](https://user-images.githubusercontent.com/23035967/236598149-a9a81a70-e263-4be3-86cd-a40f2f293bc7.png)
+![image](https://user-images.githubusercontent.com/23035967/236598156-0f9db18f-2584-4cf7-840a-ff1975e0d636.png)
+![image](https://user-images.githubusercontent.com/23035967/236598160-f25a2a93-fa2a-4ba1-a3c6-6ea41053c123.png)
+![image](https://user-images.githubusercontent.com/23035967/236598172-c3f70a90-6b36-47d7-bc7e-13a578466429.png)
+![image](https://user-images.githubusercontent.com/23035967/236598178-74681447-ce06-46fd-8ba1-7edfd2832c2b.png)
+![image](https://user-images.githubusercontent.com/23035967/236598191-9a2e0d56-afc6-4d16-b31c-f22624005d43.png)
+
+*** Credências para Logar no Sistema.
+Usuários: mvictor,meganews, admin
+Senhas: 1234, 1234, admin
