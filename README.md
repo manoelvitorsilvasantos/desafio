@@ -49,8 +49,8 @@ O sistema deve ser capaz de gerar um código QR que possa ser lido pelos cliente
 [FALCON C++ IDE](http://sourceforge.net/projects/falconcpp/files/Binaries/3.3.0.0/Falcon%20C++-3.3.0.0-Setup.exe)
 
 **2. Depedências:
-  a). ** Sqlite3:**[Sqlite3 API](https://falconcpp.sourceforge.net/packages/database/sqlite)
-  b). ** openssh:**[Openssh API](https://falconcpp.sourceforge.net/packages/cryptography)
+**a). Sqlite3:**[Sqlite3 API](https://falconcpp.sourceforge.net/packages/database/sqlite)
+**b). openssh:**[Openssh API](https://falconcpp.sourceforge.net/packages/cryptography)
 **3. Etapas:**
 
 ## Print como configurar.
