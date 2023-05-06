@@ -67,6 +67,7 @@ O sistema deve ser capaz de gerar um código QR que possa ser lido pelos cliente
 ![image](https://user-images.githubusercontent.com/23035967/236598160-f25a2a93-fa2a-4ba1-a3c6-6ea41053c123.png)
 ![image](https://user-images.githubusercontent.com/23035967/236598172-c3f70a90-6b36-47d7-bc7e-13a578466429.png)
 ![image](https://user-images.githubusercontent.com/23035967/236598178-74681447-ce06-46fd-8ba1-7edfd2832c2b.png)
+![image](https://user-images.githubusercontent.com/23035967/236602395-00dcc42f-57e8-4e23-a2e9-97131ee6c32b.png)
 ![image](https://user-images.githubusercontent.com/23035967/236598191-9a2e0d56-afc6-4d16-b31c-f22624005d43.png)
 
 ## Credências para Logar no Sistema.
