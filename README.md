@@ -45,15 +45,15 @@ O sistema deve ser capaz de gerar um código QR que possa ser lido pelos cliente
 
 # COMO CONFIGURAR OS ARQUIVOS E LIBS.
 
-**1. Primeiramente baixe a IDE:** 
+## 1. INSTALAÇÃO DA IDE Falcon C++ IDE. 
 [FALCON C++ IDE](http://sourceforge.net/projects/falconcpp/files/Binaries/3.3.0.0/Falcon%20C++-3.3.0.0-Setup.exe)
 
-**2. Depedências:
-**a). Sqlite3:**[Sqlite3 API](https://falconcpp.sourceforge.net/packages/database/sqlite)
-**b). openssh:**[Openssh API](https://falconcpp.sourceforge.net/packages/cryptography)
-**3. Etapas:**
+## 2. Depedências:
 
-## Print como configurar.
+**1). Sqlite3:**[Sqlite3 API](https://falconcpp.sourceforge.net/packages/database/sqlite)
+**2). openssh:**[Openssh API](https://falconcpp.sourceforge.net/packages/cryptography)
+
+## 3. ETAPA DE CONFIGURAÇÃO DO COMPILADOR (E necessário fazer sempre que abrir a IDE):
 
 **1. Instale a IDE;**
 **2. Instale o kit de pacote de depedência do SQLITE3;**
