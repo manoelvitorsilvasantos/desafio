@@ -13,9 +13,8 @@ void menu(sqlite3* db){
 		printf(" PAINEL DE CONTROLE\n");
 		printf(" Vendor: %s\n", vendedor);
 		printf("======================================\n");
-		printf("[1] Clientes\n");
-		printf("[2] Produtos\n");
-		printf("[3] Caixa\n");
+		printf("[1] Produtos\n");
+		printf("[2] Caixa\n");
 		printf("[4] Test\n");
 		printf("[0] Fechar\n");
 		printf("======================================\n");
@@ -32,18 +31,14 @@ void menu(sqlite3* db){
 				break;
 			}
 			case 1:{
-				menu_cliente(db);
-				break;
-			}
-			case 2:{
 				menu_produto(db);
 				break;
 			}
-			case 3:{
+			case 2:{
 				menu_caixa(db);
 				break;
 			}
-			case 4:{
+			case 3:{
 				getNone();
 				break;
 			}
