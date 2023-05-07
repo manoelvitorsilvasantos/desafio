@@ -15,7 +15,7 @@ void menu(sqlite3* db){
 		printf("======================================\n");
 		printf("[1] Produtos\n");
 		printf("[2] Caixa\n");
-		printf("[4] Test\n");
+		printf("[3] Vendas\n");
 		printf("[0] Fechar\n");
 		printf("======================================\n");
 		printf("[x] Digite a opção do Menu >>");
@@ -39,7 +39,7 @@ void menu(sqlite3* db){
 				break;
 			}
 			case 3:{
-				getNone();
+				menu_vendas(db);
 				break;
 			}
 			default:{
@@ -301,7 +301,7 @@ void menu_produto(sqlite3* db){
 					printf("======================================\n");
 					printf("Código:%d\n",produto.codigo);
 					printf("Nome: %s", produto.nome);
-					printf("Preço:%.2f\n", produto.preco);
+					printf("Preço:R%c%.2f\n", CIFRAO,produto.preco);
 					printf("Qtd:%d\n", produto.qtd);
 					printf("======================================\n");
 				}
@@ -389,10 +389,11 @@ void menu_caixa(sqlite3 *db){
 				if(status==1){
 					produto.qtd=1;
 					addCartInicio(&head, produto);
+					ordenarLista(head);
 					printLista(head);
 					float total;
 					total=calcularPrecoTotal(head);
-					printf("Preço Total: %.2f\n", total);
+					printf("Preço Total:%c%.2f\n",CIFRAO, total);
 				}
 				else{
 					system("cls");
@@ -427,13 +428,15 @@ void menu_caixa(sqlite3 *db){
 						printf("Quantos porcentos de Desconto: ");
 						scanf("%f", &desconto);
 						fflush(stdin);
+						float calc_desconto;
+						calc_desconto=0.0;
 						total=calcularPrecoTotal(head);
-						preco_total= total-calcularDesconto(total, desconto);
-						printf("Preço Total: R$ %.2f\n", preco_total);
+						calc_desconto=calcularDesconto(total, desconto);
+						printf("Preço Total: R%c %.2f\n",CIFRAO, preco_total);
 						int tam_vetor = qtdItems(head);
 						Produto produto[tam_vetor];
 						fecharCompra(tam_vetor, head, db, produto);
-				  		menu_pagamento_forma(tam_vetor, db, preco_total, vendedor, produto);
+				  		menu_pagamento_forma(tam_vetor, db, total, calc_desconto, vendedor, produto);
 					    limparCart(&head);
 					}
 					else{
@@ -449,11 +452,14 @@ void menu_caixa(sqlite3 *db){
 				fflush(stdin);
 				if(isListaEmpty(head)!=true){
 					system("cls");
+					printf("======================================\n");
+					printf(" LISTA DE COMPRA\n");
+					printf("======================================\n");
 					printLista(head);
 					total=0.0;
 					total=calcularPrecoTotal(head);
 					preco_total= total-calcularDesconto(total, desconto);
-					printf("Preço Total: % .2f\n", preco_total);
+					printf("Preço Total:R%c %.2f\n",CIFRAO, preco_total);
 				}
 				else{
 					system("cls");
@@ -492,7 +498,7 @@ void menu_caixa(sqlite3 *db){
 				if(isListaEmpty(head)!=true){
 						system("cls");
 						codigo=0;
-						printf("Códig do Item: ");
+						printf("Código do Item: ");
 						scanf("%d",&codigo);
 						fflush(stdin);
 						printf("Qtd: ");
@@ -505,7 +511,7 @@ void menu_caixa(sqlite3 *db){
 							printLista(head);
 							float total;
 							total=calcularPrecoTotal(head);
-							printf("Preço Total: %.2f\n", total);
+							printf("Preço Total: R%c%.2f\n", CIFRAO, total);
 							printf("Qtd ATUALIZADA\n");
 						}
 						else{
@@ -545,7 +551,7 @@ void menu_caixa(sqlite3 *db){
 							printLista(head);
 							float total;
 							total=calcularPrecoTotal(head);
-							printf("Preço Total: %.2f\n", total);
+							printf("Preço Total: R%c%.2f\n",CIFRAO, total);
 							printf("Qtd ATUALIZADA\n");
 						}
 					}
@@ -600,6 +606,69 @@ void menu_caixa(sqlite3 *db){
 //menu cliente
 void menu_cliente(sqlite3 * db){
 	getNone();
+}
+
+void menu_vendas(sqlite3 *db){
+	setlocale(LC_ALL, "Portuguese");
+	int opcoes;
+	opcoes=-1;
+	while(1){
+		fflush(stdin);
+		system("cls");
+		printf("======================================\n");
+		printf(" MENU DE VENDAS DE LOJA\n");
+		printf("======================================\n");
+		printf("[1] - Lista de Vendas\n");
+		printf("[2] - Buscar Por Data\n");
+		printf("[3] - Buscar Por Nome do Vendedor\n");
+		printf("[4] - Lucro Anual\n");
+		printf("[0] - Voltar ao Menu\n");
+		scanf("%d", &opcoes);
+		fflush(stdin);
+		
+		switch(opcoes)
+		{
+			
+			case 0:{
+				menu(db);
+				break;
+			}
+			
+			case 1:{ //lista de vendas.
+				printf("======================================\n");
+				printf("|| LISTA DE VENDAS: \n");
+				printf("======================================\n");
+				lista_vendas(db);
+				getNone();
+				break;
+			}
+			
+			case 2:{
+				getNone();
+				break;
+			}
+			
+			case 3:{
+				getNone();
+				break;
+			}
+			
+			case 4:{
+				getNone();
+				break;
+			}
+			
+			default:{
+				system("cls");
+				char c;
+				printf("======================================\n");
+				printf(" Opção Inválida\n");
+				printf("======================================\n");
+				printf("Tecle [ENTER] para voltar ao Menu.\n");
+				c=getchar();
+			}
+		}
+	}
 }
 
 //construção.

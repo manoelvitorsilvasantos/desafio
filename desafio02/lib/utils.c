@@ -1,4 +1,4 @@
-#include "utils.h";
+#include "libs.h"
 
 int sizeProduto(Produto produto){
 	return sizeof(produto)/sizeof(Produto);
@@ -15,3 +15,8 @@ int sizeCaixa(Caixa caixa){
 int sizeUsuario(Usuario usuario){
 	return sizeof(usuario)/sizeof(Usuario);
 }
+
+double percDesconto(float preco_desconto, float preco_original){
+	return (preco_desconto/preco_original)*100;
+}
+

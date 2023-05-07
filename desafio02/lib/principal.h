@@ -11,6 +11,7 @@ void menu_test();
 void menu(sqlite3 * db);
 void menu_produto(sqlite3 * db);
 void menu_cliente(sqlite3 * db);
+void menu_vendas(sqlite3 *db);
 int authenticate_user(const char *username, const char *password);
 void menu_caixa(sqlite3 *db);
 #ifdef __cplusplus

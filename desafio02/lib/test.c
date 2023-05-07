@@ -1,17 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <sqlite3.h>
-#include <stdbool.h>
-#include <conio.h> // para getch()
-#include <time.h>
-
-typedef struct{
-	char vendedor[30];
-	char descricao[30];
-	float valor;
-	char data[16];
-}Caixa;
+#include "pix.c"
 
 typedef struct{
 	char nome[30];
@@ -22,42 +9,45 @@ void test();
 bool openDatabase();
 bool setInfoCaixa(Caixa *caixa);
 void testLista(int TAM, int vetor[TAM]);
+void listar(sqlite3 *db);
+int verificarPagamento(char* qrcode, sqlite3 *db, Empresa *empresa);
 
 int main(){
-	bool status = openDatabase();
-	if(status!=true){
-		printf("Erro ao abrir banco de dados.\n");
-	}
-	else{
-		printf("[DATABASE OK]\n");
+	sqlite3* db;
+	int rc;
+	rc=0;
+	rc=sqlite3_open("database.db", &db);
+	if(rc!=SQLITE_OK){
+		fprintf(stderr, "Erro ao abrir banco de dados:%s\n",sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return false;
 	}
 
+	printf("\n\n");
+	mostrarChaves();
+	bool rs;
+	int bank;
+	bank=0;
+	rs=false;
+	fflush(stdin);
+	char qrcode[32];
+	while(1){
+		Empresa empresa;
+		printf("Digite o qrcode >>");
+		fgets(qrcode,32,stdin);
+		fflush(stdin);
+		if(!verificarPagamento(qrcode,db,&empresa)){
+			printf("ERROR\n");
+			continue;
+		}
+		else{
+			printf("[OK]\n");
+		}
+	}
 	
-	/*
-	strcpy(aluno[0].nome, "manoel");
-	strcpy(aluno[1].nome, "vitor");
-	aluno[0].idade = 21;
-	aluno[1].idade = 32;
-	int tam = sizeof(aluno)/sizeof(Aluno);
-	printf("Tamanho do vetor: %d\n", tam);
-	*/
-	/*
-	
-	Caixa * caixa;
-	strcpy(caixa->vendedor, "victor");
-	strcpy(caixa->descricao, "Normal");
-	caixa->valor = 2.50;
-	strcpy(caixa->data, "");
-	status=false;
-	status = setInfoCaixa(caixa);
-	if(status!=false){
-		printf("Salvo com sucesso!\n");
-	}*/
-	
-	int TAM = 5;
-	int *vetor = (int*)malloc(sizeof(int)*TAM);
-	
-	testLista(TAM, vetor);
+	char c;
+	c = getchar();
+	sqlite3_close(db);
 	
 	return 0;
 }
@@ -94,7 +84,7 @@ bool setInfoCaixa(Caixa * caixa){
 	sprintf(
 		sql, 
 		"INSERT INTO caixa(vendedor, descricao, valor, data) VALUES('%s', '%s', '%f', '%s')", 
-		caixa->vendedor, caixa->descricao, caixa->valor, datetime
+		caixa->vendedor_nome, caixa->descricao, caixa->lucro, datetime
 	);
 	
 	rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
@@ -123,6 +113,58 @@ bool openDatabase(){
 	sqlite3_close(db);
 	return true;
 }
+
+
+void listar(sqlite3 *db){
+	sqlite3_stmt *stmt;
+    int rc=0;
+    char nome[30];
+    // Prepara a query para selecionar todos os produtos
+    const char *query = "SELECT b.nome_banco, b.banco_codigo, e.pix, e.qrcode FROM empresa AS e JOIN bancos AS b ON e.banco_codigo =  b.banco_codigo;";
+    rc = sqlite3_prepare_v2(db, query, -1, &stmt, 0);
+
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Erro ao preparar a query: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+    // Executa a query e lista os produtos
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        Empresa e;
+        strcpy(nome, ((const char*)sqlite3_column_text(stmt, 0)));
+        strcpy(e.banco_codigo, ((const char*)sqlite3_column_text(stmt, 1)));
+		strcpy(e.pix, ((const char*)sqlite3_column_text(stmt, 2)));
+        strcpy(e.qrcode, ((const char*)sqlite3_column_text(stmt, 3)));
+		
+        printf("Banco:%s\n", nome);
+        printf("Código:%s", e.banco_codigo);
+        printf("Chave Pix:%s\n", e.pix);
+        printf("QRCODE:%s\n", e.qrcode);
+        printf("====================================\n");
+    }
+    fflush(stdin);
+}
+
+int verificarPagamento(char* qrcode, sqlite3 *db, Empresa *empresa) {
+    sqlite3_stmt *stmt;
+    char sql[1000];
+    int rc;
+    sprintf(sql, "SELECT * FROM empresa WHERE codigo = '%s';", qrcode);
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Erro ao preparar consulta SQL: %s\n", sqlite3_errmsg(db));
+        return 0;
+    }
+    rc = sqlite3_step(stmt);
+    if (rc == SQLITE_ROW) {
+    	strcpy(empresa->pix,((const char*)sqlite3_column_text(stmt, 0)));
+    	strcpy(empresa->qrcode,((const char*)sqlite3_column_text(stmt, 1)));
+    	strcpy(empresa->banco_codigo,((const char*)sqlite3_column_text(stmt,2)));
+        return 1;
+    } 
+    sqlite3_finalize(stmt);
+    return 0;
+}
+
 
 
 

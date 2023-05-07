@@ -1,5 +1,7 @@
 #ifndef _LIBS_H_
 #define _LIBS_H_
+#define CIFRAO 36
+#define PORCENTAGEM 37
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,6 +13,8 @@
 #include <conio.h>
 #include <ctype.h>
 #include <time.h>
+#include <openssl/md5.h>
+#define MAX_HASH_LEN 64
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -21,9 +25,8 @@ extern "C"{
 char vendedor[30];
 
 typedef struct{
-	int codigo;
-	char vendedor[30];
-	char descricao[30];
+	char vendedor_nome[30];
+	char descricao[200];
 	float lucro;
 	char datetime[20];
 }Caixa;
@@ -57,12 +60,18 @@ typedef struct{
 }Item;
 
 
+typedef struct{
+	char nome[40];
+	char pix[100];
+	char qrcode[32];
+	char banco_codigo[4];
+}Empresa;
+
 int sizeProduto(Produto produto);
 int sizeItem(Item item);
 int sizeCaixa(Caixa caixa);
 int sizeUsuario(Usuario usuario);
-
-
+double percDesconto(float preco_desconto, float preco_original);
 #ifdef __cplusplus
 }  /* End of the 'extern "C"' block */
 #endif

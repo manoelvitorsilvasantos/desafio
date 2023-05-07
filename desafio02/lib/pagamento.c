@@ -1,51 +1,114 @@
 #include "pagamento.h"
 #include "principal.h"
+#include "caixa.c"
+#include "pix.c"
 
-void menu_pagamento_forma(int TAM, sqlite3* db, float total, char vendedor[30], Produto vetor[TAM]){
+#define TAG_PIX "PIX"
+#define TAG_DINHEIRO "DINHEIRO"
+#define TAG_CC "CARTÃO DE CRÉDITO"
+#define TAG_CD "CARTÃO DE DÉBITO"
+
+void menu_pagamento_forma(int TAM, sqlite3* db, float total, float desconto, char vendedor[30], Produto vetor[TAM]){
 	int opcoes;
 	opcoes=-1;
+	char qrcode[32];
+	bool efetuado;
+	efetuado=false;
+	mostrarChaves();
 	while(1){
 		fflush(stdin);
 		system("cls");
-		printf("[4] - PIX\n");
-		printf("[1] - DINHEIRO\n");
-		printf("[2] - Cartão de Crédito\n");
-		printf("[3] - Cartão de Débito\n");
+		printf("[1] - PIX\n");
+		printf("[2] - DINHEIRO\n");
+		printf("[3] - Cartão de Crédito\n");
+		printf("[4] - Cartão de Débito\n");
 		scanf("%d", &opcoes);
 		fflush(stdin);
-		
 		switch(opcoes){
-			case 0:{
-				continue;
+			case 1:{
+				while(1){
+					fflush(stdin);
+					printf("======================================\n");
+					listar(db);
+					printf("======================================\n");
+					system("cls");
+					printf("Vendedor: %s\n", vendedor);
+					printf("Pagamento R%c %.2f Aguardando Pagamento...!\n", CIFRAO,total);
+					printf("Digite o qrcode >> ");
+					fgets(qrcode,32,stdin);
+					fflush(stdin);
+					
+					if(!verificarPagamento(qrcode)){
+						printf(" Ainda não recebemos o pagamento!\n");
+						continue;
+					}
+					else{
+						notaFiscal(TAM, db, total, desconto, vendedor, vetor, 0);
+						printf("Tecle [ENTER] para voltar ao Menu.\n");
+						printf("======================================\n");
+						char c;
+						c = getchar();
+						menu_caixa(db);
+					}
+				}
 				break;
 			}
-			case 1:{
-				printf("======================================\n");
-				printf("Vendedor: %s\n", vendedor);
-				printf("Pagamento %.2f efetuado com sucesso!\n", total);
-				notaFiscal(TAM, total, vendedor, vetor, 0);
+			case 2:{
+				notaFiscal(TAM, db, total, desconto, vendedor, vetor, 1);
 				printf("Tecle [ENTER] para voltar ao Menu.\n");
 				printf("======================================\n");
 				char c;
 				c = getchar();
 				menu_caixa(db);
-				//getNone();
-				break;
-			}
-			case 2:{
-				getNone();
 				break;
 			}
 			case 3:{
-				getNone();
+				int senha;
+				senha=0;
+				while(1)
+				{
+					printf("Digite a senha do Cartão: ");
+					scanf("%d", &senha);
+					if(senha!=2161){
+						printf("Senha incorreta!\n");
+						continue;
+					}
+					else{
+						break;
+					}
+				};
+				notaFiscal(TAM, db, total, desconto, vendedor, vetor, 2);
+				printf("Tecle [ENTER] para voltar ao Menu.\n");
+				printf("======================================\n");
+				char c;
+				c = getchar();
+				menu_caixa(db);
 				break;
 			}
 			case 4:{
-				getNone();
+				int senha;
+				senha=0;
+				while(1)
+				{
+					printf("Digite a senha do Cartão: ");
+					scanf("%d", &senha);
+					if(senha!=2161){
+						printf("Senha incorreta!\n");
+						continue;
+					}
+					else{
+						break;
+					}
+				};
+				notaFiscal(TAM, db, total, desconto, vendedor, vetor, 3);
+				printf("Tecle [ENTER] para voltar ao Menu.\n");
+				printf("======================================\n");
+				char c;
+				c = getchar();
+				menu_caixa(db);
 				break;
 			}
 			default:{
-				fflush(stdin);
 				system("cls");
 				printf("======================================\n");
 				printf("Opção Inválida!\n");
@@ -62,41 +125,198 @@ void menu_pagamento_forma(int TAM, sqlite3* db, float total, char vendedor[30], 
 	
 }
 
-void notaFiscal(int TAM, float total, char vendedor[30], Produto produto[TAM], int forma_pagamento){
+void notaFiscal(int TAM, sqlite3* db,float total, float desconto, char vendedor[30], Produto produto[TAM], int forma_pagamento){
 	time_t t = time(NULL);
 	struct tm *tm = localtime(&t);
 	char datetime[20];
-	strftime(datetime, sizeof(datetime), "%Y-%m-%d %H:%M:%S", tm);
+	strftime(datetime, sizeof(datetime), "%d/%m/%Y %H:%M:%S", tm);
 	int i;
+	bool rs;
 	i=0;
+	rs=false;
 	switch(forma_pagamento){
-		case 0:{ //dinheiro fisico.
+		case 0:{ //pix.
+			system("cls");
 			printf("======================================\n");
 			printf("|| Pagamento Via PIX\n");
 			printf("|| Vendedor: %s\n", vendedor);
 			printf("|| Data da Compra: %s\n", datetime);
+			printf("|| Total: R%c %.2f\n",CIFRAO, total);
+			printf("|| Desconto: %.2lf%%\n", percDesconto(desconto, total));
+			printf("|| Total à Pagar: R%c %.2f\n",CIFRAO, (total - desconto));
+			printf("|| Troco:R%c %.2f\n",CIFRAO, (total-(total-desconto)));
 			printf("======================================\n");
 			printf("======================================\n");
 			for(i=0;i<TAM;i++){
 				printf("|| Código: %d\n", produto[i].codigo);
 				printf("|| Descrição: %s\n", produto[i].nome);
-				printf("|| Preço: %.2f\n", produto[i].preco);
+				printf("|| Preço:R%c %.2f\n", CIFRAO, produto[i].preco);
 				printf("|| Qtd: %d\n", produto[i].qtd);
 				printf("======================================\n");
+			}
+			fflush(stdin);
+			Caixa cf;
+			strcpy(cf.vendedor_nome, vendedor);
+			strcpy(cf.descricao, TAG_PIX);
+			cf.lucro = total;
+			strcpy(cf.datetime, datetime);
+			rs=save_venda_caixa(db,&cf);
+			if(rs!=true){
+				printf("[ERROR]\n");
 			}
 			printf("======================================\n");
 			printf("|| Obrigado pela Preferência!\n");
 			printf("======================================\n");
+			
+			break;
+		}
+		case 1:{ //DINHEIRO.
+			system("cls");
+			printf("======================================\n");
+			printf("|| Pagamento Via DINHEIRO\n");
+			printf("|| Vendedor: %s\n", vendedor);
+			printf("|| Data da Compra: %s\n", datetime);
+			printf("|| Total: R%c %.2f\n",CIFRAO, total);
+			printf("|| Desconto: %.2lf%%\n", percDesconto(desconto, total));
+			printf("|| Total à Pagar: R%c %.2f\n",CIFRAO, (total - desconto));
+			printf("|| Troco:R%c %.2f\n",CIFRAO, (total-(total-desconto)));
+			printf("======================================\n");
+			printf("======================================\n");
+			for(i=0;i<TAM;i++){
+				printf("|| Código: %d\n", produto[i].codigo);
+				printf("|| Descrição: %s\n", produto[i].nome);
+				printf("|| Preço:R%c %.2f\n", CIFRAO, produto[i].preco);
+				printf("|| Qtd: %d\n", produto[i].qtd);
+				printf("======================================\n");
+			}
+			fflush(stdin);
+			Caixa cf;
+			strcpy(cf.vendedor_nome, vendedor);
+			strcpy(cf.descricao, TAG_DINHEIRO);
+			cf.lucro = total;
+			strcpy(cf.datetime, datetime);
+			rs=save_venda_caixa(db,&cf);
+			if(rs!=true){
+				printf("[ERROR]\n");
+			}
+			printf("======================================\n");
+			printf("|| Obrigado pela Preferência!\n");
+			printf("======================================\n");
+			
+			break;
+		}
+		case 2:{ //CC
+			system("cls");
+			printf("======================================\n");
+			printf("|| Pagamento Via CC\n");
+			printf("|| Vendedor: %s\n", vendedor);
+			printf("|| Data da Compra: %s\n", datetime);
+			printf("|| Total: R%c %.2f\n",CIFRAO, total);
+			printf("|| Desconto: %.2lf%%\n", percDesconto(desconto, total));
+			printf("|| Total à Pagar: R%c %.2f\n",CIFRAO, (total - desconto));
+			printf("|| Troco:R%c %.2f\n",CIFRAO, (total-(total-desconto)));
+			printf("======================================\n");
+			printf("======================================\n");
+			for(i=0;i<TAM;i++){
+				printf("|| Código: %d\n", produto[i].codigo);
+				printf("|| Descrição: %s\n", produto[i].nome);
+				printf("|| Preço:R%c %.2f\n", CIFRAO, produto[i].preco);
+				printf("|| Qtd: %d\n", produto[i].qtd);
+				printf("======================================\n");
+			}
+			fflush(stdin);
+			Caixa cf;
+			strcpy(cf.vendedor_nome, vendedor);
+			strcpy(cf.descricao, TAG_CC);
+			cf.lucro = total;
+			strcpy(cf.datetime, datetime);
+			rs=save_venda_caixa(db,&cf);
+			if(rs!=true){
+				printf("[ERROR]\n");
+			}
+			printf("======================================\n");
+			printf("|| Obrigado pela Preferência!\n");
+			printf("======================================\n");
+			
+			break;
+		}
+		case 3:{ //CC
+			system("cls");
+			printf("======================================\n");
+			printf("|| Pagamento Via Cartão de Débito\n");
+			printf("|| Vendedor: %s\n", vendedor);
+			printf("|| Data da Compra: %s\n", datetime);
+			printf("|| Total: R%c %.2f\n",CIFRAO, total);
+			printf("|| Desconto: %.2lf%%\n", percDesconto(desconto, total));
+			printf("|| Total à Pagar: R%c %.2f\n",CIFRAO, (total - desconto));
+			printf("|| Troco:R%c %.2f\n",CIFRAO, (total-(total-desconto)));
+			printf("======================================\n");
+			printf("======================================\n");
+			for(i=0;i<TAM;i++){
+				printf("|| Código: %d\n", produto[i].codigo);
+				printf("|| Descrição: %s\n", produto[i].nome);
+				printf("|| Preço:R%c %.2f\n", CIFRAO, produto[i].preco);
+				printf("|| Qtd: %d\n", produto[i].qtd);
+				printf("======================================\n");
+			}
+			fflush(stdin);
+			Caixa cf;
+			strcpy(cf.vendedor_nome, vendedor);
+			strcpy(cf.descricao, TAG_CD);
+			cf.lucro = total;
+			strcpy(cf.datetime, datetime);
+			rs=save_venda_caixa(db,&cf);
+			if(rs!=true){
+				printf("[ERROR]\n");
+			}
+			printf("======================================\n");
+			printf("|| Obrigado pela Preferência!\n");
+			printf("======================================\n");
+			
 			break;
 		}
 	}
-	
 }
 
-void setPagamento(float valor, int forma_pagamento){
-	
+void listar(sqlite3 *db){
+	sqlite3_stmt *stmt;
+    int rc=0;
+    // Prepara a query para selecionar todos os produtos
+    const char *query = "SELECT b.nome_banco, b.banco_codigo, e.pix, e.qrcode FROM empresa AS e JOIN bancos AS b ON e.banco_codigo =  b.banco_codigo";
+    rc = sqlite3_prepare_v2(db, query, -1, &stmt, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Erro ao preparar a query: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+    // Executa a query e lista os produtos
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        Empresa e;
+        strcpy(e.nome,((const char*)sqlite3_column_text(stmt, 1)));
+        strcpy(e.banco_codigo, ((const char*)sqlite3_column_text(stmt,2)));
+		strcpy(e.pix, ((const char*)sqlite3_column_text(stmt,3)));
+        strcpy(e.qrcode, ((const char*)sqlite3_column_text(stmt,4)));
+        
+		printf("Banco:%s\n",e.nome);
+        printf("Código:%s", e.banco_codigo);
+        printf("Chave Pix:%s\n", e.pix);
+        printf("QRCODE:%s\n", e.qrcode);
+        printf("====================================\n");
+    }
+    sqlite3_finalize(stmt);
+    fflush(stdin);
 }
 
-float getPagamento(){
-	return 0.0;
+bool verificarPagamento(char *qrcode){
+	return !strcmp(PIX_NUBANK,qrcode)&&
+           !strcmp(PIX_BRADESCO,qrcode)&&
+		   !strcmp(PIX_PICPAY,qrcode)&&
+		   !strcmp(PIX_SANTADER,qrcode)&&
+		   !strcmp(PIX_BB,qrcode)&&
+		   !strcmp(PIX_CAIXA,qrcode)&&
+		   !strcmp(PIX_ITAU,qrcode);			
 }
+
+
+
+
+

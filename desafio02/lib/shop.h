@@ -7,6 +7,8 @@ extern "C"{
 
 void fecharCompra(int TAM, Node* head, sqlite3* db, Produto produto[TAM]);
 Node* novoNode(Produto produto);
+void swap(Node* a, Node *b);
+void ordenarLista(Node *head);
 Produto* atribuirProdutos(Node* head, Produto* produtos, int num_produtos);
 int qtdItems(Node *head);
 void atualizarQtdItem(Node** head, Produto produto, int qtd);

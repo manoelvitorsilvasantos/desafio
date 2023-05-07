@@ -25,7 +25,6 @@ int main() {
 		fflush(stdin); //limpar buffer do teclado.
 		int status = getLogin(username, password);
 		fflush(stdin); 
-		
 		if(status == 1){
 			menu(db);
 		}

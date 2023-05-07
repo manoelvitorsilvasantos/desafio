@@ -4,8 +4,8 @@
 #ifdef __cplusplus
 extern "C"{
 #endif
-void buy_produto(sqlite3* db);
-int save_venda_caixa(sqlite3 * db, Caixa *caixa);
+bool save_venda_caixa(sqlite3 * db, Caixa *caixa);
+void lista_vendas(sqlite3 *db);
 #ifdef __cplusplus
 }  /* End of the 'extern "C"' block */
 #endif

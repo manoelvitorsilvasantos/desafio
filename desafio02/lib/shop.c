@@ -17,6 +17,7 @@ void addCartInicio(Node** head, Produto produto) {
     *head = node;
 }*/
 
+
 void diminuirQtdItemCart(Node** head, Produto produto) {
     int codigo = produto.codigo;
     int qtd = produto.preco;
@@ -176,6 +177,46 @@ void printLista(Node* head) {
     }
     printf("\n");
 }
+
+
+void swap(Node* a, Node *b){
+	Produto temp;
+	temp.codigo = a->produto.codigo;
+	strcpy(temp.nome, a->produto.nome);
+	temp.preco = a->produto.preco;
+	temp.qtd = a->produto.qtd;
+	//a -> b
+	a->produto.codigo = b->produto.codigo;
+	strcpy(a->produto.nome, b->produto.nome);
+	a->produto.preco = b->produto.preco;
+	a->produto.qtd = b->produto.qtd;
+	//b -> temp
+	b->produto.codigo = temp.codigo;
+	strcpy(b->produto.nome, temp.nome);
+	b->produto.preco = temp.preco;
+	b->produto.qtd = temp.qtd;
+}
+
+void ordenarLista(Node *head){
+	int swapped;
+	Node* ptr1 = head;
+	Node* lptr = NULL;
+	if(head == NULL)
+		return;
+	do{
+		swapped=0;
+		ptr1 = head;
+		while(ptr1->next != lptr){
+			if(strcmp(ptr1->produto.nome, ptr1->next->produto.nome) > 0){
+				swap(ptr1, ptr1->next);
+				swapped=1;
+			}
+			ptr1=ptr1->next;
+		}
+		lptr=ptr1;
+	}while(swapped);
+}
+
 //fechar compra
 void fecharCompra(int TAM, Node* head, sqlite3* db, Produto produto[TAM]) {
     Node* current = head;

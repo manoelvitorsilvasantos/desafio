@@ -5,12 +5,11 @@
 #ifdef __cplusplus
 extern "C"{
 #endif
-
-void setPagamento(float valor, int forma_pagamento);
-float getPagamento();
-
-void notaFiscal(int TAM, float total, char vendedor[30], Produto produto[TAM], int forma_pagamento);
-void menu_pagamento_forma(int TAM, sqlite3* db, float total, char vendedor[30], Produto vetor[TAM]);
+//outras funcoes.
+bool verificarPagamento(char *qrcode);
+void listar(sqlite3 *db);
+void notaFiscal(int TAM, sqlite3* db,float total, float desconto, char vendedor[30], Produto produto[TAM], int forma_pagamento);
+void menu_pagamento_forma(int TAM, sqlite3* db, float total, float desconto, char vendedor[30], Produto vetor[TAM]);
 #ifdef __cplusplus
 }  /* End of the 'extern "C"' block */
 #endif
