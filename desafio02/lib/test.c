@@ -10,7 +10,7 @@ bool openDatabase();
 bool setInfoCaixa(Caixa *caixa);
 void testLista(int TAM, int vetor[TAM]);
 void listar(sqlite3 *db);
-int verificarPagamento(char* qrcode, sqlite3 *db, Empresa *empresa);
+bool verificarPagamento(const char *qrcode);
 
 int main(){
 	sqlite3* db;
@@ -24,7 +24,6 @@ int main(){
 	}
 
 	printf("\n\n");
-	mostrarChaves();
 	bool rs;
 	int bank;
 	bank=0;
@@ -32,11 +31,11 @@ int main(){
 	fflush(stdin);
 	char qrcode[32];
 	while(1){
-		Empresa empresa;
 		printf("Digite o qrcode >>");
 		fgets(qrcode,32,stdin);
 		fflush(stdin);
-		if(!verificarPagamento(qrcode,db,&empresa)){
+		rc=verificarPagamento(qrcode);
+		if(rc!=true){
 			printf("ERROR\n");
 			continue;
 		}
@@ -144,27 +143,12 @@ void listar(sqlite3 *db){
     fflush(stdin);
 }
 
-int verificarPagamento(char* qrcode, sqlite3 *db, Empresa *empresa) {
-    sqlite3_stmt *stmt;
-    char sql[1000];
-    int rc;
-    sprintf(sql, "SELECT * FROM empresa WHERE codigo = '%s';", qrcode);
-    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
-    if (rc != SQLITE_OK) {
-        fprintf(stderr, "Erro ao preparar consulta SQL: %s\n", sqlite3_errmsg(db));
-        return 0;
-    }
-    rc = sqlite3_step(stmt);
-    if (rc == SQLITE_ROW) {
-    	strcpy(empresa->pix,((const char*)sqlite3_column_text(stmt, 0)));
-    	strcpy(empresa->qrcode,((const char*)sqlite3_column_text(stmt, 1)));
-    	strcpy(empresa->banco_codigo,((const char*)sqlite3_column_text(stmt,2)));
-        return 1;
-    } 
-    sqlite3_finalize(stmt);
-    return 0;
+bool verificarPagamento(const char *qrcode){
+	return !strcmp(qrcode, QRCODE_NUBANK)&&
+	!strcmp(qrcode,QRCODE_PICPAY)&&
+	!strcmp(qrcode,QRCODE_BRADESCO)&&
+	!strcmp(qrcode,QRCODE_SANTADER)&&
+	!strcmp(qrcode,QRCODE_BB)&&
+	!strcmp(qrcode,QRCODE_ITAU)&&
+	!strcmp(qrcode,QRCODE_CAIXA);			
 }
-
-
-
-

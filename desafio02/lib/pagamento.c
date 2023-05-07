@@ -306,14 +306,14 @@ void listar(sqlite3 *db){
     fflush(stdin);
 }
 
-bool verificarPagamento(char *qrcode){
-	return !strcmp(PIX_NUBANK,qrcode)&&
-           !strcmp(PIX_BRADESCO,qrcode)&&
-		   !strcmp(PIX_PICPAY,qrcode)&&
-		   !strcmp(PIX_SANTADER,qrcode)&&
-		   !strcmp(PIX_BB,qrcode)&&
-		   !strcmp(PIX_CAIXA,qrcode)&&
-		   !strcmp(PIX_ITAU,qrcode);			
+bool verificarPagamento(const char *qrcode){
+	return !strcmp(qrcode, QRCODE_NUBANK)&&
+	!strcmp(qrcode,QRCODE_PICPAY)&&
+	!strcmp(qrcode,QRCODE_BRADESCO)&&
+	!strcmp(qrcode,QRCODE_SANTADER)&&
+	!strcmp(qrcode,QRCODE_BB)&&
+	!strcmp(qrcode,QRCODE_ITAU)&&
+	!strcmp(qrcode,QRCODE_CAIXA);			
 }
 
 
