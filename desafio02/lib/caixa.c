@@ -70,7 +70,6 @@ void lista_vendas(sqlite3 *db){
 		strcpy(cx.descricao, ((const char*)sqlite3_column_text(stmt, 1)));
 		cx.lucro = (float) atof((const char*) sqlite3_column_text(stmt, 2));
 		strcpy(cx.datetime, ((const char*)sqlite3_column_text(stmt, 3)));
-		
         printf("Vendedor:%s\n", cx.vendedor_nome);
         printf("Tipo de Pagamento:%s\n", cx.descricao);
         printf("Total: R%c%.2f\n", CIFRAO, cx.lucro);

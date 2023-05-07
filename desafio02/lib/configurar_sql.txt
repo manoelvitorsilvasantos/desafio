@@ -1,0 +1,4 @@
+-lsqlite3
+-lssl32
+-lssl
+-lcrypto
