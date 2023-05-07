@@ -59,17 +59,26 @@ O sistema deve ser capaz de gerar um código QR que possa ser lido pelos cliente
 **2. Instale o kit de pacote de depedência do SQLITE3;**
 **3. No projeto configure a lib para compilar o projeto.**
 
+### 1 - Clique no arquivo Main.c com botão esquerdo do Mouse.
 ![image](https://user-images.githubusercontent.com/23035967/236598121-1bdd51b7-7e58-4876-bf2b-6e5f762c6436.png)
+### 2 - Clique em Propriedades.
 ![image](https://user-images.githubusercontent.com/23035967/236598128-76521c11-5808-42de-b29a-91a345c4ae13.png)
+### 3 - Clique na Opção [Compilador].
 ![image](https://user-images.githubusercontent.com/23035967/236598137-5b58c33d-de02-4b35-8dcd-c37afe4625c1.png)
+### 4 - Na caixa copie os seguintes comandos: 
+**-lsqlite3, -lssl, -lssl32, -lcrypto**, e vai adicionando os comandos.
 ![image](https://user-images.githubusercontent.com/23035967/236598149-a9a81a70-e263-4be3-86cd-a40f2f293bc7.png)
 ![image](https://user-images.githubusercontent.com/23035967/236598156-0f9db18f-2584-4cf7-840a-ff1975e0d636.png)
 ![image](https://user-images.githubusercontent.com/23035967/236598160-f25a2a93-fa2a-4ba1-a3c6-6ea41053c123.png)
 ![image](https://user-images.githubusercontent.com/23035967/236598172-c3f70a90-6b36-47d7-bc7e-13a578466429.png)
 ![image](https://user-images.githubusercontent.com/23035967/236598178-74681447-ce06-46fd-8ba1-7edfd2832c2b.png)
+### 5 - Em seguida clique no botão aplicar e Ok.
 ![image](https://user-images.githubusercontent.com/23035967/236602395-00dcc42f-57e8-4e23-a2e9-97131ee6c32b.png)
+### 6 - Agora só compilar e executar o projeto.
 ![image](https://user-images.githubusercontent.com/23035967/236598191-9a2e0d56-afc6-4d16-b31c-f22624005d43.png)
 
 ## Credências para Logar no Sistema.
 ### Usuários: mvictor,meganews, admin
 ### Senhas: 1234, 1234, admin
+## Credências para Usar o cartão de Crédito e Débito:
+### Senha: 2161
