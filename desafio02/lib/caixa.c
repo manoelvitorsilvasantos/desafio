@@ -1,6 +1,89 @@
 #include "libs.h"
 #include "caixa.h"
 
+
+void buscar_data(sqlite3 *db, char *data){
+	sqlite3_stmt *stmt;
+    char sql[1000];
+    int rc;
+    bool saida;
+    saida=false;
+    sprintf(sql,"SELECT vendedor, descricao, total_venda, substr(dt_venda, 1, 10) FROM caixa WHERE substr(dt_venda, 1, 10) = '%s'", data);
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Erro ao preparar consulta SQL: %s\n", sqlite3_errmsg(db));
+    	return;
+	}
+    else{
+		while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+	        Caixa caixa;
+	    	strcpy(caixa.vendedor_nome, ((const char*)sqlite3_column_text(stmt,0)));
+	    	strcpy(caixa.descricao, ((const char*)sqlite3_column_text(stmt,1)));
+	    	caixa.lucro = (float) atof((const char*) sqlite3_column_text(stmt,2));
+	    	strcpy(caixa.datetime, ((const char*)sqlite3_column_text(stmt,3)));
+	    	
+	    	printf("Vendedor: %s\n", caixa.vendedor_nome);
+	    	printf("Descrição: %s\n", caixa.descricao);
+	    	printf("Total Venda: %.2f\n", caixa.lucro);
+	    	printf("Data da Venda: %s\n", caixa.datetime);
+	    	printf("==============================================\n");
+		}
+	}
+    sqlite3_finalize(stmt);
+}
+
+bool verificarData(sqlite3 *db, char *data, float * valor_total, char *vendedor_nome){
+	sqlite3_stmt *stmt;
+    char sql[1000];
+    int rc;
+    bool saida;
+    saida=false;
+    sprintf(sql,"SELECT vendedor, sum(total_venda) AS total FROM caixa WHERE substr(dt_venda, 7, 4) = '%s'", data);
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Erro ao preparar consulta SQL: %s\n", sqlite3_errmsg(db));
+        saida=false;
+    }
+    rc = sqlite3_step(stmt);
+    if (rc == SQLITE_ROW) {
+    	strcpy(vendedor_nome, ((const char*)sqlite3_column_text(stmt, 0)));
+        *valor_total = (float) atof((const char*) sqlite3_column_text(stmt,1));
+        saida=true;
+    } 
+    sqlite3_finalize(stmt);
+    return saida;
+}
+
+void verificarVendedor(sqlite3 *db, char *nome_vendedor){
+	sqlite3_stmt *stmt;
+    char sql[1000];
+    int rc;
+    bool saida;
+    saida=false;
+    sprintf(sql,"SELECT * FROM caixa WHERE vendedor = '%s'", nome_vendedor);
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Erro ao preparar consulta SQL: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+    else{
+		while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+	        Caixa caixa;
+	    	strcpy(caixa.vendedor_nome, ((const char*)sqlite3_column_text(stmt,1)));
+	    	strcpy(caixa.descricao, ((const char*)sqlite3_column_text(stmt,2)));
+	    	caixa.lucro = (float) atof((const char*) sqlite3_column_text(stmt,3));
+	    	strcpy(caixa.datetime, ((const char*)sqlite3_column_text(stmt,4)));
+	    	
+	    	printf("Vendedor: %s\n", caixa.vendedor_nome);
+	    	printf("Descrição: %s\n", caixa.descricao);
+	    	printf("Total Venda: %.2f\n", caixa.lucro);
+	    	printf("Data da Venda: %s\n", caixa.datetime);
+	    	printf("==============================================\n");
+		}
+	}
+    sqlite3_finalize(stmt);
+}
+
 bool save_venda_caixa(sqlite3 *db, Caixa *caixa){
 	int rc=0;
     sqlite3_stmt * stmt;

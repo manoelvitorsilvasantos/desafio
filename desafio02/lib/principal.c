@@ -612,6 +612,14 @@ void menu_vendas(sqlite3 *db){
 	setlocale(LC_ALL, "Portuguese");
 	int opcoes;
 	opcoes=-1;
+	char data[4];
+	char data_completa[10];
+	char nome_vendedor[30];
+	char vendedor_nome[30];
+	float lucro_anual;
+	lucro_anual=0.0;
+	bool saida_venda;
+	saida_venda=false;
 	while(1){
 		fflush(stdin);
 		system("cls");
@@ -635,26 +643,83 @@ void menu_vendas(sqlite3 *db){
 			}
 			
 			case 1:{ //lista de vendas.
+				system("cls");
 				printf("======================================\n");
 				printf("|| LISTA DE VENDAS: \n");
 				printf("======================================\n");
 				lista_vendas(db);
-				getNone();
+				char c;
+				printf("======================================\n");
+				printf(" Tecle [ENTER] pra voltar ao Menu.\n");
+				printf("======================================\n");
+				c=getchar();
 				break;
 			}
 			
 			case 2:{
-				getNone();
+				system("cls");
+				printf("======================================\n");
+				printf("|| LISTA DE VENDAS: \n");
+				printf("======================================\n");
+				printf("Digite a data [dd/mm/aaaa]: ");
+				scanf("%10s", data_completa);
+				fflush(stdin);
+				system("cls");
+				printf("======================================\n");
+				printf("|| LISTA DE VENDAS: \n");
+				printf("======================================\n");
+				buscar_data(db,data_completa);
+				char c;
+				printf("======================================\n");
+				printf(" Tecle [ENTER] pra voltar ao Menu.\n");
+				printf("======================================\n");
+				c=getchar();
 				break;
 			}
 			
 			case 3:{
-				getNone();
+				system("cls");
+				printf("======================================\n");
+				printf("|| LISTA DE VENDAS: \n");
+				printf("======================================\n");
+				printf("Digite o nome do vendedor: ");
+				scanf("%30s", nome_vendedor);
+				fflush(stdin);
+				verificarVendedor(db,nome_vendedor);
+				char c;
+				printf("======================================\n");
+				printf(" Tecle [ENTER] pra voltar ao Menu.\n");
+				printf("======================================\n");
+				c=getchar();
 				break;
 			}
 			
 			case 4:{
-				getNone();
+				saida_venda=false;
+				system("cls");
+				printf("======================================\n");
+				printf("|| LISTA DE VENDAS: \n");
+				printf("======================================\n");
+				printf("Digite a data [aaaa]: ");
+				scanf("%4s", data);
+				fflush(stdin);
+				saida_venda=verificarData(db,data,&lucro_anual,vendedor_nome);
+				if(saida_venda==true){
+					system("cls");
+					printf("======================================\n");
+					printf("Vendedor: %s\n", vendedor_nome);
+					printf("Lucro Anual: R%c %.2f\n", CIFRAO, lucro_anual);
+				}
+				else{
+					system("cls");
+					printf("======================================\n");
+					printf("Não existe registro nesse ano\n");
+				}
+				char c;
+				printf("======================================\n");
+				printf(" Tecle [ENTER] pra voltar ao Menu.\n");
+				printf("======================================\n");
+				c=getchar();
 				break;
 			}
 			

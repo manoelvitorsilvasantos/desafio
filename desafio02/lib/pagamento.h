@@ -6,7 +6,7 @@
 extern "C"{
 #endif
 //outras funcoes.
-void verificarPagamento(sqlite3* db, char *qrcode, Empresa *empresa);
+bool verificarPagamento(sqlite3* db, char *qrcode, Empresa *empresa);
 void listar();
 void notaFiscal(int TAM, sqlite3* db,float total, float desconto, char vendedor[30], Produto produto[TAM], int forma_pagamento);
 void menu_pagamento_forma(int TAM, sqlite3* db, float total, float desconto, char vendedor[30], Produto vetor[TAM]);

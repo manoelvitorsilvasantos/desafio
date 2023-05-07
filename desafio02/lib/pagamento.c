@@ -36,68 +36,22 @@ void menu_pagamento_forma(int TAM, sqlite3* db, float total, float desconto, cha
 					printf("Digite o qrcode >> ");
 					scanf("%32s", qrcode);
 					fflush(stdin);
-					//verificarPagamento(db, ponteiro_qrcode,&empresa);
-					
-					if(strcmp(qrcode, QRCODE_NUBANK)==0){
-						notaFiscal(TAM, db, total, desconto, vendedor, vetor, 0);
-						printf("Tecle [ENTER] para voltar ao Menu.\n");
-						printf("======================================\n");
+					Empresa empresa;
+					efetuado = verificarPagamento(db,qrcode,&empresa);	
+					if(!efetuado){
+						printf(" QRCODE Inválido, Tente Novamente!\n");
 						char c;
-						c = getchar();
-						menu_caixa(db);
-					}
-					else if(strcmp(qrcode, QRCODE_PICPAY)==0){
-						notaFiscal(TAM, db, total, desconto, vendedor, vetor, 0);
-						printf("Tecle [ENTER] para voltar ao Menu.\n");
-						printf("======================================\n");
-						char c;
-						c = getchar();
-						menu_caixa(db);
-					}
-					else if(strcmp(qrcode, QRCODE_BRADESCO)==0){
-						notaFiscal(TAM, db, total, desconto, vendedor, vetor, 0);
-						printf("Tecle [ENTER] para voltar ao Menu.\n");
-						printf("======================================\n");
-						char c;
-						c = getchar();
-						menu_caixa(db);
-					}
-					else if(strcmp(qrcode, QRCODE_SANTADER)==0){
-						notaFiscal(TAM, db, total, desconto, vendedor, vetor, 0);
-						printf("Tecle [ENTER] para voltar ao Menu.\n");
-						printf("======================================\n");
-						char c;
-						c = getchar();
-						menu_caixa(db);
-					}
-					else if(strcmp(qrcode, QRCODE_BB)==0){
-						notaFiscal(TAM, db, total, desconto, vendedor, vetor, 0);
-						printf("Tecle [ENTER] para voltar ao Menu.\n");
-						printf("======================================\n");
-						char c;
-						c = getchar();
-						menu_caixa(db);
-					}
-					else if(strcmp(qrcode, QRCODE_ITAU)==0){
-						notaFiscal(TAM, db, total, desconto, vendedor, vetor, 0);
-						printf("Tecle [ENTER] para voltar ao Menu.\n");
-						printf("======================================\n");
-						char c;
-						c = getchar();
-						menu_caixa(db);
-					}
-					else if(strcmp(qrcode, QRCODE_CAIXA)==0){
-						notaFiscal(TAM, db, total, desconto, vendedor, vetor, 0);
-						printf("Tecle [ENTER] para voltar ao Menu.\n");
-						printf("======================================\n");
-						char c;
-						c = getchar();
-						menu_caixa(db);
+						c=getchar();
+						continue;
 					}
 					else{
-						printf(" Ainda não recebemos o pagamento!\n");
-						continue;
-					}	
+						notaFiscal(TAM, db, total, desconto, vendedor, vetor, 0);
+						printf("Tecle [ENTER] para voltar ao Menu.\n");
+						printf("======================================\n");
+						char c;
+						c = getchar();
+						menu_caixa(db);
+					}
 				}
 				break;
 			}
@@ -326,6 +280,7 @@ void notaFiscal(int TAM, sqlite3* db,float total, float desconto, char vendedor[
 	}
 }
 
+
 void listar(){
 	printf("%s: %s\n",TAG_NUBANK, QRCODE_NUBANK);
 	printf("%s: %s\n",TAG_PICPAY, QRCODE_PICPAY);
@@ -336,15 +291,18 @@ void listar(){
 	printf("%s: %s\n",TAG_CAIXA, QRCODE_CAIXA);
 }
 
-void verificarPagamento(sqlite3* db, char *qrcode, Empresa *empresa){
+bool verificarPagamento(sqlite3* db, char *qrcode, Empresa *empresa){
 	sqlite3_stmt *stmt;
     char sql[1000];
     int rc;
+    bool saida;
+    saida=false;
     sprintf(sql, "SELECT pix, qrcode, banco_codigo FROM empresa WHERE qrcode = '%s' LIMIT 1", qrcode);
     rc = sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
     if (rc != SQLITE_OK) {
         fprintf(stderr, "Erro ao preparar consulta SQL: %s\n", sqlite3_errmsg(db));
-    }
+    	saida=false;
+	}
     else{
 		rc = sqlite3_step(stmt);
     	if (rc == SQLITE_ROW){
@@ -352,15 +310,14 @@ void verificarPagamento(sqlite3* db, char *qrcode, Empresa *empresa){
     		strcpy(empresa->pix,((const char*)sqlite3_column_text(stmt,0)));
     		strcpy(empresa->qrcode,((const char*)sqlite3_column_text(stmt,1)));
     		strcpy(empresa->banco_codigo,((const char*)sqlite3_column_text(stmt,2)));
-    	}else{
-        	printf("QRCODE Errado.\n");
-        	char c;
-			c = getchar();
+    		saida=true;
+		}else{
+			saida=false;
  	    }	
 	}
     sqlite3_finalize(stmt);		
+    return saida;
 }
-
 
 
 
